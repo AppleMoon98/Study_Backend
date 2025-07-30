@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import com.example.mall.domain.Todo;
+import com.example.mall.dto.PageRequestDTO;
+import com.example.mall.dto.PageResponseDTO;
 import com.example.mall.dto.TodoDTO;
 import com.example.mall.repository.TodoRepository;
 import com.example.mall.service.TodoService;
@@ -61,9 +63,16 @@ class MallApplicationTests {
 //		long tno = todoService.register(todoDTO);
 //		log.info("줄 번호 : " + tno);
 		
-		Long tno = 101L;
-		TodoDTO todoDTO = todoService.get(tno);
-		log.info(todoDTO);
+//		Long tno = 101L;
+//		TodoDTO todoDTO = todoService.get(tno);
+//		log.info(todoDTO);
+		
+		PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+																			.page(2)
+																			.size(10)
+																			.build();
+		PageResponseDTO<TodoDTO> response = todoService.list(pageRequestDTO);
+		log.info(response);
 	}
 
 }

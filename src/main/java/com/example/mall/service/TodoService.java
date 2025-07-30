@@ -1,5 +1,7 @@
 package com.example.mall.service;
 
+import com.example.mall.dto.PageRequestDTO;
+import com.example.mall.dto.PageResponseDTO;
 import com.example.mall.dto.TodoDTO;
 
 public interface TodoService {
@@ -7,4 +9,5 @@ public interface TodoService {
 	TodoDTO get(Long tno);	// 글 조회
 	void modify(TodoDTO todoDTO);	// 글 수정
 	void delete(Long tno); // 글 삭제
+	PageResponseDTO<TodoDTO> list(PageRequestDTO pageRequestDTO);
 }

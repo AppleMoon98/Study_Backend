@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TodoDTO {
 
-	private long tno;
+	private Long tno;
 	
 	private String title;
 	
