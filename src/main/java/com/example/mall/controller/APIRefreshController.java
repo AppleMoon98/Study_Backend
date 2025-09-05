@@ -20,7 +20,7 @@ public class APIRefreshController {
 
     private final ModelMapper getMapper;
 
-	@RequestMapping("/api/member/refresh")
+	@RequestMapping("member/refresh")
 	public Map<String, Object> refresh(@RequestHeader("Authorization") String authHeader, String refreshToken){
 		if(refreshToken == null)
 			throw new CustomJWTExcaption("NULL_REFRESH");

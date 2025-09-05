@@ -62,7 +62,7 @@ public class JWTCheckFilter extends OncePerRequestFilter{
 			log.info(memberDTO);
 			log.info(memberDTO.getAuthorities());
 			
-			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(roleNames, memberDTO);
+			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberDTO, pw, memberDTO.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 			filterChain.doFilter(request, response);
 		} catch (Exception e) {
