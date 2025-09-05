@@ -37,7 +37,7 @@ public class JWTUtil {
 		return jwtStr;
 	}
 	
-	public static Map<String, Object> validateTokent(String token){
+	public static Map<String, Object> validateToken(String token){
 		Map<String, Object> claim = null;
 		
 		try {
@@ -49,15 +49,15 @@ public class JWTUtil {
 					.parseClaimsJws(token)
 					.getBody();
 		} catch (MalformedJwtException e) {	// 토큰 형식
-			throw new CustomJWTExcaption("MalFormed");
+			throw new CustomJWTException("MalFormed");
 		} catch (ExpiredJwtException e) {	// 유효시간 만료
-			throw new CustomJWTExcaption("Expired");
+			throw new CustomJWTException("Expired");
 		} catch (InvalidClaimException e) {	// 클레임 비유효
-			throw new CustomJWTExcaption("Invalid");
+			throw new CustomJWTException("Invalid");
 		} catch (JwtException e) {	
-			throw new CustomJWTExcaption("JWTError");
+			throw new CustomJWTException("JWTError");
 		} catch (Exception e) {
-			throw new CustomJWTExcaption("Error");
+			throw new CustomJWTException("Error");
 		}
 		
 		return claim;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.mall.util.CustomJWTExcaption;
+import com.example.mall.util.CustomJWTException;
 import com.example.mall.util.JWTUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -23,16 +23,16 @@ public class APIRefreshController {
 	@RequestMapping("member/refresh")
 	public Map<String, Object> refresh(@RequestHeader("Authorization") String authHeader, String refreshToken){
 		if(refreshToken == null)
-			throw new CustomJWTExcaption("NULL_REFRESH");
+			throw new CustomJWTException("NULL_REFRESH");
 		if(authHeader == null || authHeader.length() < 7)
-			throw new CustomJWTExcaption("INVALID_STRING");
+			throw new CustomJWTException("INVALID_STRING");
 		
 		String accessToken = authHeader.substring(7);
 		
 		if(checkExpiredToken(accessToken) == false)
 			return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
 		
-		Map<String, Object> claims = JWTUtil.validateTokent(refreshToken);
+		Map<String, Object> claims = JWTUtil.validateToken(refreshToken);
 		log.info("refresh" + "-".repeat(30) + claims);
 		String newAccessToken = JWTUtil.generateToken(claims, 10);
 		String newRefreshToken = checkTime((Integer) claims.get("exp")) == true ? JWTUtil.generateToken(claims, 60*24) : refreshToken;
@@ -48,7 +48,7 @@ public class APIRefreshController {
 	
 	private boolean checkExpiredToken(String token) {
 		try {
-			JWTUtil.validateTokent(token);
+			JWTUtil.validateToken(token);
 		} catch (Exception e) {
 			if(e.getMessage().equals("Expired"))
 				return true;
