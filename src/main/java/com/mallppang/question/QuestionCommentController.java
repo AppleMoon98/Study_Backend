@@ -1,0 +1,44 @@
+package com.mallppang.question;
+
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+
+@RestController
+@RequiredArgsConstructor
+@Log4j2
+@RequestMapping("/qc")
+public class QuestionCommentController {
+	private final QuestionCommentService commentService;
+
+	// 댓글 등록
+	@PostMapping("/{boardId}")
+	public Map<String, Long> register(QuestionCommentDTO questionDTO, @PathVariable("boardId") Long boardId) {
+		Long logNum = commentService.register(questionDTO);
+		return Map.of("결과", logNum);
+	}
+
+	// 댓글 수정
+	@PutMapping("/{id}")
+	public Map<String, String> modify(@PathVariable("id") Long id, QuestionCommentDTO questionDTO) {
+		questionDTO.setId(id);
+		commentService.modify(questionDTO);
+		return Map.of("결과", "성공");
+
+	}
+
+	// 댓글 삭제
+	@DeleteMapping("/{id}")
+	public Map<String, String> delete(@PathVariable("id") Long id) {
+		commentService.delete(id);
+		return Map.of("삭제", "성공");
+	}
+}
