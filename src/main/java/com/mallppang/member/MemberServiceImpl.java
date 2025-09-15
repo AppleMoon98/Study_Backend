@@ -4,18 +4,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MemberServiceImpl implements MemberService{
-//	MemberMapper mapper;
-//	MemberRepository repository;
+//	private final MemberMapper mapper;
+//	private final MemberRepository repository;
+	
 
 	@Override
 	public Long register(MemberDTO dto) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public void delete(Long uid) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

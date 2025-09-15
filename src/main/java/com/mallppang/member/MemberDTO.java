@@ -21,15 +21,17 @@ public class MemberDTO extends User{
 	private String password;
 	private String nickname;
 	private boolean social;
+	private String telNum;
 	private List<String> roleNames = new ArrayList<>();
 	
-	public MemberDTO(String email, String password, String nickname, boolean social, List<String> roleNames) {
+	public MemberDTO(String email, String password, String nickname, boolean social, List<String> roleNames, String telNum) {
 		super(email, password, roleNames.stream().map(str -> new SimpleGrantedAuthority("ROLE_" + str)).collect(Collectors.toList()));
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
 		this.social = social;
 		this.roleNames = roleNames;
+		this.telNum = telNum;
 	}
 	
 	public Map<String, Object> getClaims(){
@@ -40,6 +42,7 @@ public class MemberDTO extends User{
 		dataMap.put("nickname", nickname);
 		dataMap.put("social", social);
 		dataMap.put("roleNames", roleNames);
+		dataMap.put("telNum", telNum);
 		
 		return dataMap;
 	}

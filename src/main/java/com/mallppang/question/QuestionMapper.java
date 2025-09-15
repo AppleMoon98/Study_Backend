@@ -12,8 +12,11 @@ public class QuestionMapper extends BoardMapper{
 		QuestionDTO dto = QuestionDTO.builder().build();
 		super.entityToDTO(entity, dto);
 		
+		if(entity.getMember() != null)
+			dto.setWriter(entity.getMember().getNickname());
+		
 		if(dto.getUploadFileNames() != null)
-		dto.setUploadFileNames(entity.getImageList().stream().map(BoardImage::getFileName).toList());
+			dto.setUploadFileNames(entity.getImageList().stream().map(BoardImage::getFileName).toList());
 		
 		return dto;
 	}

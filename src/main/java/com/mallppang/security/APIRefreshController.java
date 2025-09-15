@@ -21,19 +21,17 @@ public class APIRefreshController {
             @RequestHeader(value = "Authorization") String authHeader,
             @RequestParam("refreshToken") String refreshToken) {
 
-        if (refreshToken == null || refreshToken.isBlank()) {
+        if (refreshToken == null || refreshToken.isBlank()) 
             throw new RuntimeException("NULL_REFRESH"); // ← 프로젝트의 Custom 예외로 교체 권장
-        }
 
         // 1) access token 추출(없으면 null)
         String accessToken = null;
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) 
             accessToken = authHeader.substring(7);
-        }
 
         // 2) access 만료 여부 판단
         boolean accessExpired = true;
-        if (accessToken != null) {
+        if (accessToken != null) 
             try {
                 JWTUtil.validateToken(accessToken);
                 accessExpired = false;
@@ -41,7 +39,6 @@ public class APIRefreshController {
                 // 만료/위조/기타 오류는 전부 새 access 발급 대상으로 처리
                 accessExpired = true;
             }
-        }
 
         // 3) refresh 유효성 검증(여기서 만료/위조면 예외 발생)
         Map<String, Object> claims = JWTUtil.validateToken(refreshToken);

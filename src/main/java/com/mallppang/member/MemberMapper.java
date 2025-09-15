@@ -8,6 +8,7 @@ public class MemberMapper {
 				, entity.getPassword()
 				, entity.getNickname()
 				, entity.isSocial()
+				, null
 				, null);		// 나중에 수정
 		return dto;
 	}

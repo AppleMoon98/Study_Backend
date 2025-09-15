@@ -39,23 +39,26 @@ public class QuestionService implements BaseService<QuestionDTO> {
 	public Long register(QuestionDTO questionDTO) {
 		var auth = SecurityContextHolder.getContext().getAuthentication();
 		
-		
-		if(auth == null || auth instanceof AnonymousAuthenticationToken) {
+		// 비로그인 차단
+		if(auth == null || auth instanceof AnonymousAuthenticationToken)
 			throw new AuthenticationCredentialsNotFoundException("Login required");
-		}
 		
 		String email = null;
 		Object p = auth.getPrincipal();
 		
+		// 어떻게든 회원 정보 찾아서 가져옴
 		if (p instanceof MemberDTO me)
 			email= me.getEmail();
 		else if(p instanceof User ud)
 			email = ud.getUsername();
 		else if(p instanceof String s && !"anonymousUser".equals(s))
 			email = s;
+		
+		// 근데 없어?
 		if(email == null || email.isBlank())
 			throw new AuthenticationCredentialsNotFoundException("Login required");
 		
+		// 마지막으로 이메일 찾기, 없으면 null
 		var member = memberRepository.getWithRoles(email);
 		if(member == null)
 			throw new IllegalStateException("해당 이메일을 등록한 회원을 찾을 수 없습니다 : " + email);
@@ -74,7 +77,6 @@ public class QuestionService implements BaseService<QuestionDTO> {
 		Optional<Question> result = questionRepository.selectOne(id);
 		Question question = result.orElseThrow();
 		QuestionDTO questionDTO = mapper.entityToDTO(question);
-		System.err.println();
 		return questionDTO;
 	}
 
@@ -97,6 +99,8 @@ public class QuestionService implements BaseService<QuestionDTO> {
 
 	@Override
 	public void delete(Long id) {
+		// 여기서 소프트 리스트에서 제거되는 이유는
+		// 애초에 쿼리문에서 안 들어오게 WHERE를 걸어뒀기 때문
 		questionRepository.updateToDelete(id, true);
 	}
 
@@ -110,8 +114,9 @@ public class QuestionService implements BaseService<QuestionDTO> {
 			Question question = (Question) arr[0];
 			BoardImage questionImage = (BoardImage) arr[1];
 
-			QuestionDTO questionDTO = QuestionDTO.builder().id(question.getId()).title(question.getTitle()).content(question.getContent()).createDate(question.getCreateDate())
-					.build();
+			/*QuestionDTO questionDTO = QuestionDTO.builder().id(question.getId()).title(question.getTitle()).content(question.getContent())
+							.createDate(question.getCreateDate()).build();	// 작성날짜 끌고오는 부분*/
+			 QuestionDTO questionDTO= mapper.entityToDTO(question);
 
 			if (questionImage != null)
 				questionDTO.setUploadFileNames(List.of(questionImage.getFileName()));

@@ -15,6 +15,7 @@ public class FreeCommentMapper extends CommentMapper{
 		
 		if(entity.getMember() != null)
 			dto.setWriter(entity.getMember().getNickname());
+		System.err.println(entity.getMember());
 		
 		return dto;
 	}

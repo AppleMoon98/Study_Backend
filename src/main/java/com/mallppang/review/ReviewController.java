@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mallppang.CustomFileUtil;
 import com.mallppang.base.PageRequestDTO;
 import com.mallppang.base.PageResponseDTO;
+import com.mallppang.member.MemberDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,8 +33,7 @@ public class ReviewController {
 	private final ReviewService reviewService;
 	
 	@PostMapping("/")//질문 등록
-	public Map<String, Long> register(ReviewDTO reviewDTO){
-		log.info("register : " + reviewDTO);
+	public Map<String, Long> register(ReviewDTO reviewDTO, @AuthenticationPrincipal MemberDTO memberDTO){
 		List<MultipartFile> files = reviewDTO.getFiles();
 		List<String> uploadFileNames = fileUtil.saveFiles(files);
 		reviewDTO.setUploadFileNames(uploadFileNames);
@@ -48,7 +49,7 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/l")//질문 목록
-	public PageResponseDTO<ReviewDTO> list(PageRequestDTO pageRequestDTO){
+	public PageResponseDTO<ReviewDTO> getList(PageRequestDTO pageRequestDTO){
 		return reviewService.getList(pageRequestDTO);
 	}
 	
@@ -61,11 +62,10 @@ public class ReviewController {
 	@PutMapping("/{id}")//질문 수정하기
 	public Map<String, String> modify(@PathVariable("id") Long id, ReviewDTO reviewDTO){
 		reviewDTO.setId(id);
+		
 		ReviewDTO oldReviewDTO = reviewService.get(id);
 		List<String> oldFileNames = oldReviewDTO.getUploadFileNames();
-		
 		List<MultipartFile> files = reviewDTO.getFiles();
-		
 		List<String> currentUploadFileNames = fileUtil.saveFiles(files);
 		List<String> uploadFileNames = reviewDTO.getUploadFileNames();
 		

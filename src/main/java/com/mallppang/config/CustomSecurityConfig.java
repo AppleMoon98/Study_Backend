@@ -44,7 +44,9 @@ public class CustomSecurityConfig {
 						"/member/login",
 						"/member/auth/**",
 						"/f/**",
-						"/fc/**"
+						"/fc/**",
+						"/r/**",
+						"/rc/**"
 						).permitAll()
 				.anyRequest().authenticated())
 		.cors(cors -> cors.configurationSource(corsConfigurationSource()));

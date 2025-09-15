@@ -14,4 +14,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class QuestionCommentDTO extends CommentDTO{
+	private String writer;
 }

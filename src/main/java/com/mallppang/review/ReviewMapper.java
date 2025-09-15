@@ -14,6 +14,10 @@ public class ReviewMapper extends BoardMapper {
 
 		if (reviewBoard.getImageList() != null)
 			reviewDTO.setUploadFileNames(reviewBoard.getImageList().stream().map(BoardImage::getFileName).toList());
+		
+		if(reviewBoard.getMember() != null)
+		reviewDTO.setWriter(reviewBoard.getMember().getNickname());
+		
 		return reviewDTO;
 	}
 

@@ -14,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class QuestionDTO extends BaseDTO{
-
+	private String writer;	// 작성자 출력용
 }

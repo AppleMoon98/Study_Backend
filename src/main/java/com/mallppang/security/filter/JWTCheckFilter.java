@@ -36,8 +36,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 		if (path.startsWith("/member/login") || path.startsWith("/member/auth/"))
 			return true;
 		
-		if(path.startsWith("/r/"))
-			return true;
 
 		return false;
 	}
@@ -104,9 +102,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 			String email = (String) claims.get("email");
 			String password = (String) claims.get("password");
 			String nickname = (String) claims.get("nickname");
+			String telNum = (String) claims.get("telNum");
 			Boolean social = (Boolean) claims.get("social");
 			List<String> roleNames = (List<String>) claims.get("roleNames");
-			MemberDTO memberDTO = new MemberDTO(email, password, nickname, social, roleNames);
+			MemberDTO memberDTO = new MemberDTO(email, password, nickname, social, roleNames, telNum);
 
 			log.info("-".repeat(30));
 			log.info(memberDTO);
