@@ -1,22 +1,41 @@
 package com.mallppang.member;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class MemberMapper {
 	private MemberRepository repository;
 	
-	public MemberDTO entityToDTO(Member entity) {
-		MemberDTO dto = new MemberDTO(entity.getEmail()
-				, entity.getPassword()
-				, entity.getNickname()
-				, entity.isSocial()
-				, null
-				, null);		// 나중에 수정
-		return dto;
+	public MemberDTO entityToDTO(Member e) {
+		List<String> roles = e.getMemberRoleList() == null ? List.of()
+				: e.getMemberRoleList().stream()
+					.map(Enum::name)
+					.collect(Collectors.toList());
+					
+					return new MemberDTO(
+						e.getEmail(),
+						e.getPassword(),
+						e.getNickname(),
+						e.isSocial(),
+						roles,
+						e.getTelNum()
+						);
+					
 	}
 	
 	public Member dtoToEntity(MemberDTO dto) {
-		Member entity = new Member();
-		entity = repository.findByEmailAndPassword(dto.getEmail(), dto.getPassword());
-		return entity;
+		return Member.builder()
+		.email(dto.getEmail())
+		.password(dto.getPassword())
+		.nickname(dto.getNickname())
+		.social(dto.isSocial())
+		.telNum(dto.getTelNum())
+		.memberRoleList(
+			(dto.getRoleNames() == null ? List.<String>of() : dto.getRoleNames()).stream()
+			.map(MemberRole :: valueOf)
+			.collect(Collectors.toList())
+		)
+		.build();
 	}
 
 }

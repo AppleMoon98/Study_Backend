@@ -2,6 +2,7 @@ package com.mallppang.freeboard;
 
 import com.mallppang.base.CommentDTO;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

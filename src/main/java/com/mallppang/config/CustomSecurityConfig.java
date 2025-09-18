@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,14 +41,8 @@ public class CustomSecurityConfig {
 		
 		// 이거 설정 잘못하면 프론트 엑시오스 에러남
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers(
-						"/member/login",
-						"/member/auth/**",
-						"/f/**",
-						"/fc/**",
-						"/r/**",
-						"/rc/**"
-						).permitAll()
+				.requestMatchers("/member/login", "/member/auth/**", "/member/register", "/member/refresh").permitAll()
+				.requestMatchers(HttpMethod.GET, "/f/**", "/fc/**","/r/**","/rc/**","/n/**", "/q/**").permitAll()
 				.anyRequest().authenticated())
 		.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 		

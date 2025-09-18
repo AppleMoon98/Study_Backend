@@ -4,12 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,8 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mallppang.base.CommentService;
-import com.mallppang.base.PageRequestDTO;
-import com.mallppang.base.PageResponseDTO;
 import com.mallppang.member.MemberDTO;
 import com.mallppang.member.MemberRepository;
 
@@ -66,8 +59,6 @@ public class ReviewCommentService implements CommentService<ReviewCommentDTO>{
 		return commentRepository.save(review).getId();
 	}
 	
-
-
 	@Override
 	public List<ReviewCommentDTO> getList(Long boardId){
 		List<ReviewComment> entityList = commentRepository.getList(boardId);

@@ -72,6 +72,7 @@ public class ReviewService implements BaseService<ReviewDTO> {
 		
 		// 회원 정보 찾아오기
 		if(p instanceof MemberDTO memberDTO)
+			
 			email = memberDTO.getEmail();
 		else if (p instanceof User userData)
 			email = userData.getUsername();
@@ -106,18 +107,18 @@ public class ReviewService implements BaseService<ReviewDTO> {
 		@Override
 	public void modify(ReviewDTO reviewDTO) {
 		Optional<ReviewBoard> result = reviewRepository.findById(reviewDTO.getId());
-		ReviewBoard free = result.orElseThrow();
+		ReviewBoard review = result.orElseThrow();
 
-		free.setTitle(reviewDTO.getTitle());
-		free.setContent(reviewDTO.getContent());
-		free.clearImageList();
+		review.setTitle(reviewDTO.getTitle());
+		review.setContent(reviewDTO.getContent());
+		review.clearImageList();
 
 		List<String> uploadFileNames = reviewDTO.getUploadFileNames();
 
 		if (uploadFileNames != null && uploadFileNames.size() > 0)
-			uploadFileNames.stream().forEach(uploadName -> free.addImageString(uploadName));
+			uploadFileNames.stream().forEach(uploadName -> review.addImageString(uploadName));
 
-		reviewRepository.save(free);
+		reviewRepository.save(review);
 	}
 
 

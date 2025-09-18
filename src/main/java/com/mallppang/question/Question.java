@@ -32,10 +32,10 @@ public class Question extends BaseBoard{
 	private List<QuestionComment> commentList;
 	
 	@ElementCollection
-	@CollectionTable(name = "question_image", joinColumns = @JoinColumn(name = "question_board_id"))
+	@CollectionTable(name = "question_image", joinColumns = @JoinColumn(name= "question_id"))
 	@Builder.Default
 	private List<BoardImage> imageList = new ArrayList<>();
-	
+		
 	public void addImage(BoardImage image) {
 		image.setOrd(this.imageList.size());
 		imageList.add(image);

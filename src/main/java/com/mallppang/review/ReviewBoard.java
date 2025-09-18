@@ -39,6 +39,10 @@ public class ReviewBoard extends BaseBoard{
 	@JoinColumn(name = "uid")
     private Member user;
 	
+	
+	// 양방향 참조 때문에 무한 루프를 도는 것일 수 있음
+	// 수정 가능한지 확인하고 안되면 다른 방향 찾아보기
+	// 현재 가장 가능성이 높은 것은 양방향 참조임 
 	@OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
 	private List<ReviewComment> commentList;
 	

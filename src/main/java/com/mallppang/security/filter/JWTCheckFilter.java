@@ -33,27 +33,26 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 		String path = request.getRequestURI();
 		log.info("check uri" + ".".repeat(20) + path);
 
-		if (path.startsWith("/member/login") || path.startsWith("/member/auth/"))
+		if (path.startsWith("/member/login") || path.startsWith("/member/auth/") || path.startsWith("/member/refresh"))
 			return true;
 		
-
 		return false;
 	}
 	
 	private String resolveBearerToken(HttpServletRequest req) {
-	    // 1) Authorization 헤더 우선
+	    // Authorization 헤더 우선
 	    String auth = req.getHeader("Authorization");
 	    if (auth != null && auth.startsWith("Bearer ")) return auth.substring(7);
 
-	    // 2) 없으면 쿠키에서 찾기
+	    // 없으면 쿠키에서 찾기
 	    // (쿠키 이름은 실제 사용 중인 이름으로 바꾸세요: 예 "member", "loginInfo" 등)
 	    String raw = getCookieValue(req, "member"); 
 	    if (raw == null || raw.isBlank()) return null;
 
-	    // 2-1) URL 디코딩
+	    // URL 디코딩
 	    String decoded = URLDecoder.decode(raw, StandardCharsets.UTF_8);
 
-	    // 2-2) JSON이면 accessToken 필드 뽑기
+	    // JSON이면 accessToken 필드 뽑기
 	    try {
 	        if (decoded.startsWith("{")) {
 	            JsonNode node = new ObjectMapper().readTree(decoded);

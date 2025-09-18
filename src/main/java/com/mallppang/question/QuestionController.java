@@ -33,7 +33,7 @@ public class QuestionController {
 	private final QuestionService questionService;
 	
 	@PostMapping("/")
-	public Map<String, Object> register(QuestionDTO questionDTO, @AuthenticationPrincipal MemberDTO memberDTO) {
+	public Map<String, Long> register(QuestionDTO questionDTO, @AuthenticationPrincipal MemberDTO memberDTO) {
 		List<MultipartFile> files = questionDTO.getFiles();
 		List<String> uploadFileNames = fileUtil.saveFiles(files);
 		questionDTO.setUploadFileNames(uploadFileNames);
@@ -49,6 +49,7 @@ public class QuestionController {
 	public ResponseEntity<Resource> viewFileGet(@PathVariable("filename") String fileName) {
 		return fileUtil.getFile(fileName);
 	}
+	
 	@GetMapping("/l")
 	public PageResponseDTO<QuestionDTO> getList(PageRequestDTO pageRequestDTO) {
 		return questionService.getList(pageRequestDTO);

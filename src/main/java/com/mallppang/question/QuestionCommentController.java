@@ -23,12 +23,12 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RequestMapping("/qc")
 public class QuestionCommentController {
-	private final QuestionCommentService questionCommentService;
+	private final QuestionCommentService CommentService;
 
 	// 댓글 등록
 	@PostMapping("/{boardId}")
-	public Map<String, Long> register(@RequestBody QuestionCommentDTO questionDTO, @PathVariable("boardId") Long boardId, @AuthenticationPrincipal MemberDTO memberDTO) {
-		Long logNum = questionCommentService.register(questionDTO, boardId);
+	public Map<String, Long> register(@RequestBody QuestionCommentDTO questionDTO, @PathVariable("boardId") Long boardId, @AuthenticationPrincipal MemberDTO memberDTO){
+		Long logNum = CommentService.register(questionDTO, boardId);
 		return Map.of("결과", logNum);
 	}
 
@@ -36,14 +36,14 @@ public class QuestionCommentController {
 	@PutMapping("/{id}")
 	public Map<String, String> modify(@PathVariable("id") Long id, QuestionCommentDTO questionDTO) {
 		questionDTO.setId(id);
-		questionCommentService.modify(questionDTO);
+		CommentService.modify(questionDTO);
 		return Map.of("수정", "성공");
 	}
 
 	// 댓글 삭제
 	@DeleteMapping("/{id}")
 	public Map<String, String> delete(@PathVariable("id") Long id) {
-		questionCommentService.delete(id);
+		CommentService.delete(id);
 		
 		return Map.of("삭제", "성공");
 	}
@@ -51,6 +51,6 @@ public class QuestionCommentController {
 	// 댓글 리스트 받기
 	@GetMapping("/{boardId}")
 	public List<QuestionCommentDTO> getList(@PathVariable("boardId") Long boardId){
-		return questionCommentService.getList(boardId);
+		return CommentService.getList(boardId);
 	}
 }
