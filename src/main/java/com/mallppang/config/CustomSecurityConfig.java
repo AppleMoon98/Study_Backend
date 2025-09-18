@@ -28,29 +28,29 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 public class CustomSecurityConfig {
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		log.info("------------------------------security config------------------------------");
-		http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()));
+		http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
+				.configurationSource(corsConfigurationSource()));
 		http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.csrf(config -> config.disable());
 		http.formLogin(config -> {
 			config.loginPage("/member/login");
-			config.successHandler(new APILoginSuccessHandler());	
+			config.successHandler(new APILoginSuccessHandler());
 			config.failureHandler(new APILoginFailHandler());
 		});
-		
+
 		// 이거 설정 잘못하면 프론트 엑시오스 에러남
 		http.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/member/login", "/member/auth/**", "/member/register", "/member/refresh").permitAll()
-				.requestMatchers(HttpMethod.GET, "/f/**", "/fc/**","/r/**","/rc/**","/n/**", "/q/**").permitAll()
-				.anyRequest().authenticated())
-		.cors(cors -> cors.configurationSource(corsConfigurationSource()));
-		
+				.requestMatchers(HttpMethod.GET, "/f/**", "/fc/**", "/r/**", "/rc/**", "/n/**", "/q/**").permitAll()
+				.anyRequest().authenticated()).cors(cors -> cors.configurationSource(corsConfigurationSource()));
+
 		http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 		http.exceptionHandling(config -> config.accessDeniedHandler(new CustomAccessDeniedHandler()));
 		return http.build();
 	}
-	
+
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
@@ -59,10 +59,10 @@ public class CustomSecurityConfig {
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
 		configuration.setAllowCredentials(true);
-		
+
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
-		
+
 		return source;
 	}
 	
