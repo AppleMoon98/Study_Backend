@@ -5,11 +5,13 @@ import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -42,12 +44,15 @@ public class CustomSecurityConfig {
 
 		// 이거 설정 잘못하면 프론트 엑시오스 에러남
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/member/login", "/member/auth/**", "/member/register", "/member/refresh").permitAll()
+				.requestMatchers("/member/**").permitAll()
 				.requestMatchers(HttpMethod.GET, "/f/**", "/fc/**", "/r/**", "/rc/**", "/n/**", "/q/**").permitAll()
 				.anyRequest().authenticated()).cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
 		http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
-		http.exceptionHandling(config -> config.accessDeniedHandler(new CustomAccessDeniedHandler()));
+		http.exceptionHandling(config -> {
+			config.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+			config.accessDeniedHandler(new CustomAccessDeniedHandler());
+		});
 		return http.build();
 	}
 

@@ -16,4 +16,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class FreeCommentDTO extends CommentDTO{
 	private String writer;
+	private String email;
 }

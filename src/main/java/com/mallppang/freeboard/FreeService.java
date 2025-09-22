@@ -37,6 +37,8 @@ public class FreeService implements BaseService<FreeDTO> {
 
 	@Override
 	public Long register(FreeDTO freeDTO) {
+		// auth를 가져오는데, 
+		// 컨트롤러에서 HttpServletResponse를 가져왔어야 작동함
 		var auth = SecurityContextHolder.getContext().getAuthentication();
 
 	    // 비로그인 차단
@@ -112,11 +114,16 @@ public class FreeService implements BaseService<FreeDTO> {
 		List<FreeDTO> dtoList = result.get().map(arr -> {
 			FreeBoard free = (FreeBoard) arr[0];
 			BoardImage freeImage = (BoardImage) arr[1];
+			String nickname = (String) arr[2];
 
-			// 문득 든 생각인데 빌더 왜씀? 매퍼 만들었잖아
-//			FreeDTO freeDTO = FreeDTO.builder().id(free.getId()).title(free.getTitle()).content(free.getContent())
-//					.createDate(free.getCreateDate()).build();	// 작성날짜 끌고오는 부분
-			FreeDTO freeDTO = mapper.entityToDTO(free);
+			FreeDTO freeDTO = FreeDTO.builder()
+					.id(free.getId())
+					.title(free.getTitle())
+					.content(free.getContent())
+					.createDate(free.getCreateDate())
+					.delFlag(free.isDelFlag())
+					.writer(nickname)
+					.build();
 
 			if (freeImage != null)
 				freeDTO.setUploadFileNames(List.of(freeImage.getFileName()));

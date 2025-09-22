@@ -19,6 +19,6 @@ public interface FreeRepository extends JpaRepository<FreeBoard, Long> {
     @Query("UPDATE FreeBoard f SET f.delFlag = :flag WHERE f.id = :id")
     void updateToDelete(@Param("id") Long id, @Param("flag") boolean flag);
     
-    @Query("SELECT f, fi FROM FreeBoard f LEFT JOIN f.imageList fi ON fi.ord = 0 WHERE f.delFlag = FALSE")
+    @Query("SELECT f, fi, m.nickname FROM FreeBoard f JOIN FETCH f.member m LEFT JOIN f.imageList fi ON fi.ord = 0 WHERE f.delFlag = FALSE ORDER BY f.id DESC")
     Page<Object[]> selectList(Pageable pageable);
 }

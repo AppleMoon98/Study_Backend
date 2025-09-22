@@ -3,16 +3,19 @@ package com.mallppang.auth;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.client.RestTemplate;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.gson.Gson;
@@ -23,7 +26,6 @@ import com.mallppang.member.MemberRepository;
 import com.mallppang.member.MemberRole;
 import com.mallppang.util.JWTUtil;
 
-import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -99,8 +101,15 @@ public class AuthController {
 				dto.getRoleNames(), "accessToken", accessToken, "refreshToken", refreshToken));
 	}
 
+	/**
+	 * 카카오 로그인 API
+	 * 
+	 * @param dto
+	 * @param response
+	 * @return
+	 */
 	@PostMapping("/kakao")
-	private ResponseEntity<?> testget(@RequestBody KakaoDTO dto, HttpServletResponse response) {
+	private ResponseEntity<?> kakaoLogin(@RequestBody KakaoDTO dto, HttpServletResponse response) {
 		System.err.println(dto);
 		String email = dto.getEmail();
 		String name = dto.getNickname();
@@ -138,6 +147,65 @@ public class AuthController {
 		memberCookie.setPath("/");
 		memberCookie.setMaxAge(60 * 60 * 24);
 		response.addCookie(memberCookie);
+
+		System.err.println(memberCookie.getValue());
+		return ResponseEntity.ok(Map.of("email", memberDTO.getEmail(), "nickname", memberDTO.getNickname(), "roleNames",
+				memberDTO.getRoleNames(), "accessToken", accessToken, "refreshToken", refreshToken));
+	}
+
+	private final RestTemplate restTemplate = new RestTemplate();
+
+	@PostMapping("/naver")
+	public ResponseEntity<Map<String, Object>> naverLogin(@RequestHeader("Authorization") String authorization, HttpServletResponse httpServletResponse) {
+		String accessToken = authorization.replace("Bearer", "").trim();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(accessToken);
+		HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+		ResponseEntity<Map> response = restTemplate.exchange("https://openapi.naver.com/v1/nid/me", HttpMethod.GET,
+				entity, Map.class);
+
+		// 정보 안 날아오면 리턴
+		if (response == null)
+			return null;
+
+		Map<String, String> dataMap = (Map) response.getBody().get("response");
+		String email = dataMap.get("email");
+		String name = dataMap.get("nickname");
+		String telNum = dataMap.get("mobile");
+
+		Member member = memberRepository.getWithRoles(email);
+		if (member == null) {
+			member = Member.builder().email(email).password(passwordEncoder.encode("SOCIAL_LOGIN"))
+					.nickname(name != null ? name : email).social(true).telNum(telNum).build();
+			member.addRole(MemberRole.MEMBER);
+			member = memberRepository.save(member);
+		} else if (!member.isSocial()) {
+			// 기존에 같은 이메일의 주소가 있을 경우
+			// social 자동 연결
+			member.setSocial(true);
+			memberRepository.save(member);
+		}
+
+		// JWT 발급
+		MemberDTO memberDTO = memberMapper.entityToDTO(member);
+		Map<String, Object> claims = memberDTO.getClaims();
+
+		// JWTCheckFilter가 읽을 수 있도록 쿠키 member에 저장
+		accessToken = JWTUtil.generateToken(claims, 10);
+		String refreshToken = JWTUtil.generateToken(claims, 60 * 24);
+		claims.put("accessToken", accessToken);
+		claims.put("refreshToken", refreshToken);
+
+		String memberJson = new Gson().toJson(claims);
+
+		Cookie memberCookie = new Cookie("member", URLEncoder.encode(memberJson));
+		memberCookie.setHttpOnly(false);
+		memberCookie.setSecure(false);
+		memberCookie.setPath("/");
+		memberCookie.setMaxAge(60 * 60 * 24);
+		httpServletResponse.addCookie(memberCookie);
 
 		System.err.println(memberCookie.getValue());
 		return ResponseEntity.ok(Map.of("email", memberDTO.getEmail(), "nickname", memberDTO.getNickname(), "roleNames",

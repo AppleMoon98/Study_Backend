@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.mallppang.bakery.BakeryProduct;
 import com.mallppang.member.Member;
 
 import jakarta.persistence.ElementCollection;
