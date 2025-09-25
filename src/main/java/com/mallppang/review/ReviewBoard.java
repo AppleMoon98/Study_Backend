@@ -3,7 +3,6 @@ package com.mallppang.review;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mallppang.base.BaseBoard;
 import com.mallppang.base.BoardImage;
 import com.mallppang.member.Member;
@@ -37,7 +36,7 @@ public class ReviewBoard extends BaseBoard{
 	
 	@ManyToOne
 	@JoinColumn(name = "uid")
-    private Member user;
+    private Member member;
 	
 	
 	// 양방향 참조 때문에 무한 루프를 도는 것일 수 있음

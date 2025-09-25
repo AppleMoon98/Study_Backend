@@ -13,9 +13,10 @@ public class QuestionCommentMapper extends CommentMapper{
 		QuestionCommentDTO dto = QuestionCommentDTO.builder().boardId(entity.getBoard().getId()).build();
 		super.entityToDTO(entity, dto);
 		
-		if(entity.getMember() != null)
+		if(entity.getMember() != null) {
 			dto.setWriter(entity.getMember().getNickname());
-		System.err.println(entity.getMember());
+			dto.setEmail(entity.getMember().getEmail());
+		}
 		
 		return dto;
 	}

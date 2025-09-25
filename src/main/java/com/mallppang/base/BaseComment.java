@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.mallppang.member.Member;
 
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,6 +32,6 @@ public class BaseComment {
 	private LocalDateTime createDate;
 	private boolean delFlag;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Member member;
 }

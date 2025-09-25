@@ -15,4 +15,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class QuestionCommentDTO extends CommentDTO{
 	private String writer;
+	private String email;
 }

@@ -33,7 +33,7 @@ public class ReviewCommentController {
 	}
 	
 	@PutMapping("/{id}")//답글 수정
-	public Map<String, String> modify(@PathVariable("id") Long id, ReviewCommentDTO commentDTO){
+	public Map<String, String> modify(@PathVariable("id") Long id, @RequestBody ReviewCommentDTO commentDTO){
 			commentDTO.setId(id);
 			reviewCommentService.modify(commentDTO);
 			

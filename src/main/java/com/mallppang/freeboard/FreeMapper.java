@@ -12,8 +12,10 @@ public class FreeMapper extends BoardMapper {
 		FreeDTO dto = FreeDTO.builder().build();
 		super.entityToDTO(entity, dto);
 		
-		if(entity.getMember() != null)
+		if(entity.getMember() != null) {
 			dto.setWriter(entity.getMember().getNickname());
+			dto.setEmail(entity.getMember().getEmail());
+		}
 		
 		if(entity.getImageList() != null)
 		dto.setUploadFileNames(entity.getImageList().stream().map(BoardImage::getFileName).toList());

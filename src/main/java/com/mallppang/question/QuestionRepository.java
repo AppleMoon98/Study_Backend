@@ -19,6 +19,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 	@Query("UPDATE Question q SET q.delFlag = :flag WHERE q.id = :id")
 	void updateToDelete(@Param("id") Long id, @Param("flag") boolean flag);
 	
-	@Query("SELECT q, qi FROM Question q LEFT JOIN q.imageList qi ON qi.ord = 0 WHERE q.delFlag = FALSE")
+	@Query("SELECT q, qi, m.nickname FROM Question q JOIN FETCH q.member m LEFT JOIN q.imageList qi ON qi.ord = 0 WHERE q.delFlag = FALSE ORDER BY q.id DESC")
 	Page<Object[]> selectList(Pageable pageable);
 }

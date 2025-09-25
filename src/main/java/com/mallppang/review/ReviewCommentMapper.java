@@ -1,6 +1,7 @@
 package com.mallppang.review;
 
 import org.springframework.stereotype.Component;
+
 import com.mallppang.base.CommentMapper;
 
 import lombok.AllArgsConstructor;
@@ -13,10 +14,10 @@ public class ReviewCommentMapper extends CommentMapper{
 		ReviewCommentDTO dto = ReviewCommentDTO.builder().boardId(entity.getBoard().getId()).build();
 		super.entityToDTO(entity, dto);
 		
-		if(entity.getMember() !=null)
+		if(entity.getMember() !=null){
 			dto.setWriter(entity.getMember().getNickname());
-		System.err.println(entity.getMember());
-		
+			dto.setEmail(entity.getMember().getEmail());
+		}
 		return dto;
 	}
 	// 여기서 get이 루프를 일으킬 수 있다길래 삭제함 

@@ -1,6 +1,7 @@
 package com.mallppang.bakery;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +27,8 @@ public class BakeryProduct {
 	private String name;
 	private String content;
 	private String fileName;
+	private String price;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Bakery bakery;
 }

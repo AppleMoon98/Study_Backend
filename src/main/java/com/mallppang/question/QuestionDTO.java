@@ -15,4 +15,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class QuestionDTO extends BaseDTO{
 	private String writer;	// 작성자 출력용
+	private String email;  // 수정 및 삭제 권한을 위한
 }

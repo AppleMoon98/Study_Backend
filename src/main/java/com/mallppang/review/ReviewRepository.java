@@ -20,6 +20,6 @@ public interface ReviewRepository extends JpaRepository<ReviewBoard, Long>{
 	void updateToDelete(@Param("id") Long id, @Param("flag") boolean flag);
 	
 	
-	@Query("SELECT r, ri FROM ReviewBoard r LEFT JOIN r.imageList ri ON ri.ord = 0 WHERE r.delFlag = FALSE")
+	@Query("SELECT r, ri, m.nickname FROM ReviewBoard r join fetch r.member m LEFT JOIN r.imageList ri ON ri.ord = 0 WHERE r.delFlag = FALSE order by r.id desc")
 	Page<Object[]> selectList(Pageable pageable);
 }

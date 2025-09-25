@@ -62,9 +62,9 @@ public class QuestionCommentService implements CommentService<QuestionCommentDTO
 	@Override
 	public void modify(QuestionCommentDTO dto) {
 		Optional<QuestionComment> result = commentRepository.findById(dto.getId());
-		QuestionComment question = result.orElseThrow();
-		question.setContent(dto.getContent());
-		commentRepository.save(question);
+		QuestionComment comment = result.orElseThrow();
+		comment.setContent(dto.getContent());
+		commentRepository.save(comment);
 	}
 	
 	@Override

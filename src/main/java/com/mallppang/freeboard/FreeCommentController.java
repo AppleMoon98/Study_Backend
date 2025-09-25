@@ -34,7 +34,7 @@ public class FreeCommentController {
 	
 	// 댓글 수정
 	@PutMapping("/{id}")
-	public Map<String, String> modify(@PathVariable("id") Long id, FreeCommentDTO freeDTO){
+	public Map<String, String> modify(@PathVariable("id") Long id, @RequestBody FreeCommentDTO freeDTO){
 		freeDTO.setId(id);
 		commentService.modify(freeDTO);
 		return Map.of("수정", "성공");

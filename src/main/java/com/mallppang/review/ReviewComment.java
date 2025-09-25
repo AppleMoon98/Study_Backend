@@ -3,6 +3,7 @@ package com.mallppang.review;
 import com.mallppang.base.BaseComment;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +18,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewComment extends BaseComment{
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private ReviewBoard board;
 }

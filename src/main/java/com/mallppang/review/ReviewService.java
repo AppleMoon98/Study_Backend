@@ -45,7 +45,16 @@ public class ReviewService implements BaseService<ReviewDTO> {
 			ReviewBoard reviewBoard = (ReviewBoard) arr[0];
 			BoardImage boardImage = (BoardImage) arr[1];
 
-			ReviewDTO reviewDTO = mapper.entityToDTO(reviewBoard);
+//			ReviewDTO reviewDTO = mapper.entityToDTO(reviewBoard);
+			ReviewDTO reviewDTO = ReviewDTO.builder()
+														.id(reviewBoard.getId())
+														.title(reviewBoard.getTitle())
+														.content(reviewBoard.getContent())
+														.createDate(reviewBoard.getCreateDate())
+														.delFlag(reviewBoard.isDelFlag())
+														.writer(reviewBoard.getMember().getNickname())
+														.email(reviewBoard.getMember().getEmail())
+														.build();
 
 			if (boardImage != null)
 				reviewDTO.setUploadFileNames(List.of(boardImage.getFileName()));

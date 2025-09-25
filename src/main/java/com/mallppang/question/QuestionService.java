@@ -37,6 +37,8 @@ public class QuestionService implements BaseService<QuestionDTO> {
 
 	@Override
 	public Long register(QuestionDTO questionDTO) {
+		// auth를 가져오는데, 
+		// 컨트롤러에서 HttpServletResponse를 가져왔어야 작동함
 		var auth = SecurityContextHolder.getContext().getAuthentication();
 		
 		// 비로그인 차단
@@ -66,10 +68,9 @@ public class QuestionService implements BaseService<QuestionDTO> {
 		
 		Question question = mapper.dtoToEntity(questionDTO);
 		question.setMember(member);
-		question.setCreateDate(LocalDateTime.now());
+		question.setCreateDate(LocalDateTime.now());	// 작성날짜 지정
 		
-		return questionRepository.save(question).getId();
-	
+		return questionRepository.save(question).getId();	//UID
 	}
 
 	@Override
@@ -110,14 +111,20 @@ public class QuestionService implements BaseService<QuestionDTO> {
 				Sort.by("id").descending());
 		Page<Object[]> result = questionRepository.selectList(pageable);
 		
-		List<QuestionDTO> dtList = result.get().map(arr -> {
+		List<QuestionDTO> dtoList = result.get().map(arr -> {
 			Question question = (Question) arr[0];
 			BoardImage questionImage = (BoardImage) arr[1];
+			String nickname = (String) arr[2];
 
-			/*QuestionDTO questionDTO = QuestionDTO.builder().id(question.getId()).title(question.getTitle()).content(question.getContent())
-							.createDate(question.getCreateDate()).build();	// 작성날짜 끌고오는 부분*/
-			 QuestionDTO questionDTO= mapper.entityToDTO(question);
-
+			QuestionDTO questionDTO = QuestionDTO.builder()
+						.id(question.getId())
+						.title(question.getTitle())
+						.content(question.getContent())
+						.createDate(question.getCreateDate())
+						.delFlag(question.isDelFlag())
+						.writer(nickname)
+						.build();	// 작성날짜 끌고오는 부분
+			 
 			if (questionImage != null)
 				questionDTO.setUploadFileNames(List.of(questionImage.getFileName()));
 
@@ -125,7 +132,7 @@ public class QuestionService implements BaseService<QuestionDTO> {
 		}).collect(Collectors.toList());
 		Long totalCount = result.getTotalElements();
 
-		return PageResponseDTO.<QuestionDTO>withAll().dtoList(dtList).totalCount(totalCount).pageRequestDTO(pageRequestDTO)
+		return PageResponseDTO.<QuestionDTO>withAll().dtoList(dtoList).totalCount(totalCount).pageRequestDTO(pageRequestDTO)
 				.build();
 	}
 }

@@ -44,7 +44,7 @@ public class CustomSecurityConfig {
 
 		// 이거 설정 잘못하면 프론트 엑시오스 에러남
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/member/**").permitAll()
+				.requestMatchers("/member/**", "/api/**").permitAll()
 				.requestMatchers(HttpMethod.GET, "/f/**", "/fc/**", "/r/**", "/rc/**", "/n/**", "/q/**").permitAll()
 				.anyRequest().authenticated()).cors(cors -> cors.configurationSource(corsConfigurationSource()));
 

@@ -75,9 +75,7 @@ public class QuestionController {
 		questionService.modify(questionDTO);
 		
 		if (oldFileNames != null && oldFileNames.size() > 0) {
-			List<String> removeFiles = oldFileNames
-						 .stream()
-						 .filter(fileName -> uploadFileNames.indexOf(fileName) == -1)
+			List<String> removeFiles = oldFileNames.stream().filter(fileName -> uploadFileNames.indexOf(fileName) == -1)
 						 .collect(Collectors.toList());
 			fileUtil.deleteFiles(removeFiles);
 		}

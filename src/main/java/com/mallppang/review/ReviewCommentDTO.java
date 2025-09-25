@@ -15,4 +15,5 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public class ReviewCommentDTO extends CommentDTO{
 	private String writer;
+	private String email;
 }
