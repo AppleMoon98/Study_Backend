@@ -24,11 +24,20 @@ public class BakeryProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	// 이름
 	private String name;
+	
+	// 상품 설명
 	private String content;
+	
+	// 썸네일
 	private String fileName;
+	
+	// 가격
 	private String price;
 	
+	// 쿼리문 참조
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Bakery bakery;
 }

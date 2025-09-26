@@ -2,39 +2,11 @@ package com.mallppang.verification;
 
 import com.mallppang.config.RedisConfig;
 import com.solapi.sdk.SolapiClient;
-import com.solapi.sdk.message.dto.request.MessageListRequest;
-import com.solapi.sdk.message.dto.request.SendRequestConfig;
-import com.solapi.sdk.message.dto.response.MessageListResponse;
 import com.solapi.sdk.message.dto.response.MultipleDetailMessageSentResponse;
-import com.solapi.sdk.message.exception.SolapiEmptyResponseException;
-import com.solapi.sdk.message.exception.SolapiMessageNotReceivedException;
-import com.solapi.sdk.message.exception.SolapiUnknownException;
-import com.solapi.sdk.message.model.Balance;
 import com.solapi.sdk.message.model.Message;
-import com.solapi.sdk.message.model.StorageType;
-import com.solapi.sdk.message.model.voice.VoiceOption;
 import com.solapi.sdk.message.service.DefaultMessageService;
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-
 
 @RestController
 @RequestMapping("/api/sms")

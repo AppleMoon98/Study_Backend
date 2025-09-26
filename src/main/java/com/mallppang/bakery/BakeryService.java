@@ -1,5 +1,6 @@
 package com.mallppang.bakery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -20,7 +21,12 @@ public class BakeryService {
 		return bakeryRepository.save(bakery).getId();
 	}
 	
-	public List<Bakery> getAllBakeries(){
-		return bakeryRepository.findAll();
+	// 규약? 사항 위반으로 수정
+	public List<BakeryDTO> getBakeries(){
+		List<Bakery> entitys = bakeryRepository.findAll();
+		List<BakeryDTO> dto = new ArrayList<>();
+		for(Bakery entity : entitys)
+			dto.add(mapper.entityToDTO(entity));
+		return dto;
 	}
 }
