@@ -22,4 +22,5 @@ public interface ReviewRepository extends JpaRepository<ReviewBoard, Long>{
 	
 	@Query("SELECT r, ri, m.nickname FROM ReviewBoard r join fetch r.member m LEFT JOIN r.imageList ri ON ri.ord = 0 WHERE r.delFlag = FALSE order by r.id desc")
 	Page<Object[]> selectList(Pageable pageable);
+	
 }

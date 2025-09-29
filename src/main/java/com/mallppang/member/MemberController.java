@@ -2,9 +2,11 @@ package com.mallppang.member;
 
 import java.util.Map;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,5 +37,17 @@ public class MemberController {
 			return Map.of("error", "MEMBER_UNDEFINED");
 		memberService.delete(entity);
 		return Map.of("회원 삭제", "성공 : " + entity.getEmail());
+	}
+	
+	@PutMapping("/nickname")
+	private Map<String, String> modifyNickname(@AuthenticationPrincipal MemberDTO memberDTO, @RequestBody String nickname){
+		memberService.modifyNickname(memberDTO, nickname);
+		return Map.of("변경 성공", nickname);
+	}
+	
+	@PutMapping("/password")
+	private Map<String, String> modifyPassword(@AuthenticationPrincipal Member entity, String data){
+		memberService.modifyPassword(entity, data);
+		return Map.of("변경 성공", "비밀번호");
 	}
 }

@@ -1,13 +1,16 @@
 package com.mallppang.member;
 
+import java.time.LocalDateTime;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberServiceImpl implements MemberService{
 	private final MemberMapper mapper;
 	private final MemberRepository repository;
@@ -16,7 +19,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public void register(RegisterDTO dto, boolean seller) {
-		Member member = Member.builder().email(dto.getEmail()).nickname(dto.getNickname()).telNum(dto.getTelNum()).build();
+		Member member = Member.builder().email(dto.getEmail()).nickname(dto.getNickname()).telNum(dto.getTelNum()).joinedAt(LocalDateTime.now()).build();
 		member.addRole(MemberRole.MEMBER);
 		if(seller)
 			member.addRole(MemberRole.SELLER);
@@ -45,5 +48,24 @@ public class MemberServiceImpl implements MemberService{
 		
 		MemberDTO dto = mapper.entityToDTO(member);
 		return dto;
+	}
+
+	@Override
+	public void modifyNickname(MemberDTO dto, String data) {
+		if(dto == null || data == null)
+			return;
+		
+		Member member = repository.findByEmail(dto.getEmail()).orElseThrow();
+		member.setNickname(data);
+		repository.save(member);
+	}
+
+	@Override
+	public void modifyPassword(Member entity, String data) {
+		if(entity == null || data == null)
+			return;
+		
+		entity.setPassword(passwordEncoder.encode(data));
+		repository.save(entity);
 	}
 }

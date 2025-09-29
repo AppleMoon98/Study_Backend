@@ -1,32 +1,40 @@
-package com.mallppang.domain;
+package com.mallppang.reservation;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
+@Entity
+@Table(name = "menu_item")
 @Getter
 @Setter
-@Entity
-@ToString
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class BakeryProduct {
+@AllArgsConstructor
+@Builder
+public class MenuItem {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
-	private String content;
-	private String fileName;
 	
-	@ManyToOne
-	private Bakery bakery;
+	private Long menuId;
+	private String name;
+	private int quantity;
+	private int price;
+	private int totalPrice;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "reservation_id")
+	private Reservation reservation;
+	
 }

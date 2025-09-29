@@ -3,6 +3,7 @@ package com.mallppang.review;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mallppang.bakery.Bakery;
 import com.mallppang.base.BaseBoard;
 import com.mallppang.base.BoardImage;
 import com.mallppang.member.Member;
@@ -11,6 +12,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -50,6 +52,7 @@ public class ReviewBoard extends BaseBoard{
 	@Builder.Default
 	private List<BoardImage> imageList = new ArrayList<>();
 	
+	
 	public void addImage(BoardImage image) {
 		image.setOrd(this.imageList.size());
 		imageList.add(image);
@@ -65,4 +68,8 @@ public class ReviewBoard extends BaseBoard{
 	public void clearImageList() {
 		this.imageList.clear();
 	}
-}
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Bakery bakery; 
+
+	}

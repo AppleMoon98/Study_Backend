@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mallppang.bakery.Bakery;
+import com.mallppang.bakery.BakeryRepository;
 import com.mallppang.base.BaseService;
 import com.mallppang.base.BoardImage;
 import com.mallppang.base.PageRequestDTO;
@@ -34,11 +36,13 @@ public class ReviewService implements BaseService<ReviewDTO> {
 	private final ReviewRepository reviewRepository;
 	private final ReviewMapper mapper;
 	private final MemberRepository memberRepository;
+	private final BakeryRepository bakeryRepository;
 
 	@Override
 	public PageResponseDTO<ReviewDTO> getList(PageRequestDTO pageRequestDTO) {
 		Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(),
 				Sort.by("id").descending());
+		
 
 		Page<Object[]> result = reviewRepository.selectList(pageable);
 		List<ReviewDTO> dtoList = result.get().map(arr -> {
@@ -47,14 +51,14 @@ public class ReviewService implements BaseService<ReviewDTO> {
 
 //			ReviewDTO reviewDTO = mapper.entityToDTO(reviewBoard);
 			ReviewDTO reviewDTO = ReviewDTO.builder()
-														.id(reviewBoard.getId())
-														.title(reviewBoard.getTitle())
-														.content(reviewBoard.getContent())
-														.createDate(reviewBoard.getCreateDate())
-														.delFlag(reviewBoard.isDelFlag())
-														.writer(reviewBoard.getMember().getNickname())
-														.email(reviewBoard.getMember().getEmail())
-														.build();
+						.id(reviewBoard.getId())
+						.title(reviewBoard.getTitle())
+						.content(reviewBoard.getContent())
+						.createDate(reviewBoard.getCreateDate())
+						.delFlag(reviewBoard.isDelFlag())
+						.writer(reviewBoard.getMember().getNickname())
+						.email(reviewBoard.getMember().getEmail())
+						.build();
 
 			if (boardImage != null)
 				reviewDTO.setUploadFileNames(List.of(boardImage.getFileName()));
@@ -97,10 +101,15 @@ public class ReviewService implements BaseService<ReviewDTO> {
 		var member = memberRepository.getWithRoles(email);
 		if (member == null)
 			throw new IllegalStateException("해당 이메일로 등록된 회원을 찾을 수 없습니다 : " + email);
+		
+		Bakery bakery = bakeryRepository.findById(reviewDTO.getBakeryId()).get();
+		if(bakery != null)
+			reviewDTO.setBakeryId(bakery.getId());
 			
 		ReviewBoard review = mapper.dtoToEntity(reviewDTO);
 		review.setMember(member);
 		review.setCreateDate(LocalDateTime.now());// 작성 날짜 지정 (현재 날짜 및 시간)
+		review.setBakery(bakery);
 		
 		return reviewRepository.save(review).getId(); //UID
 	}
@@ -110,6 +119,10 @@ public class ReviewService implements BaseService<ReviewDTO> {
 		Optional<ReviewBoard> result = reviewRepository.selectOne(id);
 		ReviewBoard reviewBoard = result.orElseThrow();
 		ReviewDTO reviewDTO = mapper.entityToDTO(reviewBoard);
+		
+		if(reviewBoard.getBakery() != null) {
+        reviewDTO.setBakeryId(reviewBoard.getBakery().getId());
+    }
 		return reviewDTO;
 	}
 	

@@ -17,4 +17,6 @@ public class ReviewDTO extends BaseDTO{
 	private String writer;
 	private String email;
 	
+	private Long bakeryId;
+	
 }

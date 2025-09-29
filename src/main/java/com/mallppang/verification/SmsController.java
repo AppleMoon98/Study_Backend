@@ -164,9 +164,11 @@ public class SmsController {
 			// 메시지 내용: [몰빵] 인증번호 [100000~999999]를 입력해주세요. 사칭/전화사기에 주의하세요.
 			message.setText("[몰빵] 인증번호 [" + dto.getNumber() + "]를 입력해주세요. 사칭/전화사기에 주의하세요.");
 			MultipleDetailMessageSentResponse response = this.messageService.send(message);
+			System.err.println("메세지 전송완료");
 			return response;
 		} catch (Exception e) {
 			e.fillInStackTrace();
+			System.err.println(e.getMessage());
 		}
 		return null;
 	}

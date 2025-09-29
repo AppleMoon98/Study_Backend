@@ -12,8 +12,8 @@ public class MemberMapper {
 	public MemberDTO entityToDTO(Member e) {
 		List<String> roles = e.getMemberRoleList() == null ? List.of()
 				: e.getMemberRoleList().stream().map(Enum::name).collect(Collectors.toList());
-
-		return new MemberDTO(e.getEmail(), e.getPassword(), e.getNickname(), e.isSocial(), roles, e.getTelNum());
+		MemberDTO memberDTO = new MemberDTO(e.getEmail(), e.getPassword(), e.getNickname(), e.isSocial(), roles, e.getTelNum());
+		return memberDTO;
 
 	}
 

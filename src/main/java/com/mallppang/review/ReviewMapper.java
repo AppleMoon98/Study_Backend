@@ -19,8 +19,7 @@ public class ReviewMapper extends BoardMapper {
 			reviewDTO.setWriter(reviewBoard.getMember().getNickname());
 			reviewDTO.setEmail(reviewBoard.getMember().getEmail());
 		}
-		
-		
+	
 		return reviewDTO;
 	}
 

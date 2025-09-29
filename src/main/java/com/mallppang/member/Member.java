@@ -1,6 +1,8 @@
 package com.mallppang.member;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -38,6 +40,7 @@ public class Member {
 	@Column(unique = true)
 	private String nickname;
 	private String password;
+	private LocalDateTime joinedAt;
 	private boolean social;
 	
 	@ElementCollection(fetch = FetchType.LAZY)
