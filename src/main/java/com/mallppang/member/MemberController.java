@@ -2,6 +2,7 @@ package com.mallppang.member;
 
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,8 +47,8 @@ public class MemberController {
 	}
 	
 	@PutMapping("/password")
-	private Map<String, String> modifyPassword(@AuthenticationPrincipal Member entity, String data){
-		memberService.modifyPassword(entity, data);
-		return Map.of("변경 성공", "비밀번호");
+	private ResponseEntity<Boolean> modifyPassword(@AuthenticationPrincipal MemberDTO principal, @RequestBody ChangePasswordDTO req){
+		memberService.modifyPassword(principal.getUsername(), req.getCurrentPassword(), req.getNewPassword());
+        return ResponseEntity.noContent().build();
 	}
 }

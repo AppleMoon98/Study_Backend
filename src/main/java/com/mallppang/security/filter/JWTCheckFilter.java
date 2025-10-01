@@ -35,7 +35,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 		
 		// 마이페이지 내용만 따로
 		if(path.startsWith("/member/nickname")
-				|| path.startsWith("/member/password"))
+				|| path.startsWith("/member/password")
+				|| path.startsWith("/api/reservations"))
 			return false;
 
 		if (path.startsWith("/member/"))
@@ -131,8 +132,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
 			Gson gson = new Gson();
 			String msg = gson.toJson(Map.of("error", "ERROR_ACCESS_TOKEN"));
-
 			response.setContentType("application/json");
+
 			PrintWriter printWriter = response.getWriter();
 			printWriter.println(msg);
 			printWriter.close();

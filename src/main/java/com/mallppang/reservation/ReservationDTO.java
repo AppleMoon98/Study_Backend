@@ -3,6 +3,7 @@ package com.mallppang.reservation;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReservationDTO {
@@ -25,8 +27,9 @@ public class ReservationDTO {
 	@Getter
 	@Setter
 	@ToString
-	@NoArgsConstructor
+	@Builder
 	@AllArgsConstructor
+	@NoArgsConstructor
 	public static class MenuItemDTO{
 		private Long menuId;
 		private String name;

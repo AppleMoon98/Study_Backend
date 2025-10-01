@@ -47,12 +47,13 @@ public class CustomSecurityConfig {
 				.requestMatchers("/member/**", "/api/**").permitAll()
 				.requestMatchers(HttpMethod.GET, "/f/**", "/fc/**", "/r/**", "/rc/**", "/n/**", "/q/**").permitAll()
 				.anyRequest().authenticated()).cors(cors -> cors.configurationSource(corsConfigurationSource()));
-
+		
 		http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 		http.exceptionHandling(config -> {
 			config.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 			config.accessDeniedHandler(new CustomAccessDeniedHandler());
 		});
+		
 		return http.build();
 	}
 

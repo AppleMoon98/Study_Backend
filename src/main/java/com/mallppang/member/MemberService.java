@@ -6,5 +6,5 @@ public interface MemberService {
 	void delete(Member entity); // 계정 삭제(임시)
 	
 	void modifyNickname(MemberDTO dto, String data);
-	void modifyPassword(Member entity, String data);
+	void modifyPassword(String email, String currentRaw, String newRaw);
 }

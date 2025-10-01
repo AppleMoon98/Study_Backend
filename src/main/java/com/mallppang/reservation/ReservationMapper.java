@@ -4,8 +4,8 @@ import java.util.stream.Collectors;
 
 public class ReservationMapper {
 	
-	public static Reservation toEntity(ReservationDTO dto){
-		Reservation reservation = Reservation.builder()
+	public static Reservation dtoToEntity(ReservationDTO dto){
+		Reservation entity = Reservation.builder()
 						.bakeryId(dto.getBakeryId())
 						.bakeryName(dto.getBakeryName())
 						.bakeryAddress(dto.getBakeryAddress())
@@ -23,23 +23,23 @@ public class ReservationMapper {
 								).collect(Collectors.toList()))
 						.build();
 						
-		  if(reservation.getMenu() != null){
-			  reservation.getMenu().forEach(menu -> menu.setReservation(reservation));
-		  }
+		  if(entity.getMenu() != null)
+			  entity.getMenu().forEach(menu -> menu.setReservation(entity));
 		  
-		  return reservation;
+		  return entity;
 	}
 	
-	public static ReservationDTO toDTO(Reservation reservation){
-		ReservationDTO dto = new ReservationDTO();
-		dto.setBakeryId(reservation.getBakeryId());
-		dto.setBakeryName(reservation.getBakeryName());
-		dto.setBakeryAddress(reservation.getBakeryAddress());
-		dto.setDate(reservation.getDate());
-		dto.setTotalPrice(reservation.getTotalPrice());
+	public static ReservationDTO entityToDTO(Reservation entity){
+		ReservationDTO dto = ReservationDTO.builder()
+				.bakeryId(entity.getBakeryId())
+				.bakeryName(entity.getBakeryName())
+				.bakeryAddress(entity.getBakeryAddress())
+				.date(entity.getDate())
+				.totalPrice(entity.getTotalPrice())
+				.build();
 		
-		if(reservation.getMenu() !=null){
-			dto.setMenu(reservation.getMenu().stream().map(menu -> new ReservationDTO.MenuItemDTO(
+		if(entity.getMenu() !=null){
+			dto.setMenu(entity.getMenu().stream().map(menu -> new ReservationDTO.MenuItemDTO(
 				menu.getMenuId(),
 				menu.getName(),
 				menu.getQuantity(),
