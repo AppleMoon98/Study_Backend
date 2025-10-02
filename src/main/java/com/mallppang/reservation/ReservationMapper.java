@@ -12,6 +12,7 @@ public class ReservationMapper {
 						.date(dto.getDate())
 						.time(dto.getTime())
 						.totalPrice(dto.getTotalPrice())
+						.delFlag(dto.isDelFlag())
 						.menu(dto.getMenu() == null ? null : dto.getMenu().stream()
 								.map(menuDTO -> MenuItem.builder()
 										.menuId(menuDTO.getMenuId())
@@ -31,11 +32,14 @@ public class ReservationMapper {
 	
 	public static ReservationDTO entityToDTO(Reservation entity){
 		ReservationDTO dto = ReservationDTO.builder()
+				.id(entity.getId())
 				.bakeryId(entity.getBakeryId())
 				.bakeryName(entity.getBakeryName())
 				.bakeryAddress(entity.getBakeryAddress())
 				.date(entity.getDate())
+				.time(entity.getTime())
 				.totalPrice(entity.getTotalPrice())
+				.delFlag(entity.getDelFlag())
 				.build();
 		
 		if(entity.getMenu() !=null){

@@ -24,18 +24,20 @@ public class MemberRepositoryTest {
 	@Test
 	public void testInsertMember() {
 		// 아이디 복사버그 드간다 와쟈쟈쟛
-		for(int i = 0; i < 10; i++) {
-			Member member = Member.builder().email("e" + i)
+//		for(int i = 0; i < 10; i++) {
+			Member member = Member.builder().email("e" + 1)
 					.password(passwordEncoder.encode("123"))
-					.nickname("member" + i)
+					.nickname("member" + 1)
 					.build();
 			
 			member.addRole(MemberRole.MEMBER);
-			if(i >= 5) member.addRole(MemberRole.SELLER);
-			if(i >= 8) member.addRole(MemberRole.ADMIN);
+//			if(i >= 5) 
+				member.addRole(MemberRole.SELLER);
+//			if(i >= 8) 
+				member.addRole(MemberRole.ADMIN);
 			
 			memberRepository.save(member);
-		}
+//		}
 		
 		
 		

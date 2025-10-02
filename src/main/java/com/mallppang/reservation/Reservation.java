@@ -3,6 +3,7 @@ package com.mallppang.reservation;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -36,6 +37,9 @@ public class Reservation {
 	private String date;
 	private String time;
 	private int totalPrice;
+	
+	@Builder.Default
+	private Boolean delFlag = false;
 	
 	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<MenuItem> menu;

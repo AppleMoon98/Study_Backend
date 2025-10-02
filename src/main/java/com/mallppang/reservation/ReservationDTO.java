@@ -16,11 +16,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReservationDTO {
+	private Long id;
 	private Long bakeryId;
 	private String bakeryName;
 	private String bakeryAddress;
 	private String date;
 	private String time;
+	private boolean delFlag;
 	private int totalPrice;
 	private List<MenuItemDTO> menu;
 	
